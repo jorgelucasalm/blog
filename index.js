@@ -4,22 +4,29 @@ const bodyParse = require("body-parser");
 
 const connection = require('./database/database')
 
+const article = require("./articles/Article")
+const category = require("./categories/Category")
+
 const articleController = require('./articles/ArticlesController')
 const categoriesController = require('./categories/CategoriesController')
+
+// Conectando com o banco
+connection
+    .authenticate()
+    .then(() => {
+        console.log("Banco funcionando!")
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+
+app.use(articleController);
+app.use(categoriesController);
 
 // Fazendo o express usar o EJS como view engine
 app.set('view engine', 'ejs');
 // Definindo a pasta onde ficam os arquivos estaticos
 app.use(express.static('public'))
-
-app.use(articleController);
-app.use(categoriesController);
-
-connection.authenticate().then(()=>{
-    console.log("Banco funcionando!")
-}).catch((err)=>{
-    console.log(err)
-})
 
 // instalando o Body Parse
 app.use(bodyParse.urlencoded({ extended: false }));

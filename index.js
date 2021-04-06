@@ -29,8 +29,8 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'))
 
 // instalando o Body Parse
-app.use(bodyParse.urlencoded({ extended: false }));
-app.use(bodyParse.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Rotas
 //Home page

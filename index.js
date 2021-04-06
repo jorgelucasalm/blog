@@ -28,7 +28,7 @@ app.set('view engine', 'ejs');
 // Definindo a pasta onde ficam os arquivos estaticos
 app.use(express.static('public'))
 
-// instalando o Body Parse
+// instalando o Body Parse OBS: Não precisa instalar a biblioteca do body-parser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

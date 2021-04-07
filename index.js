@@ -34,8 +34,14 @@ app.use(express.json());
 // Rotas
 //Home page
 app.get("/", (req, res) => {
-    Article.findAll().then(articles => {
-        res.render('index', { articles: articles })
+    Article.findAll({
+        order: [
+            ['id', 'DESC']
+        ]
+    }).then(articles => {
+        Category.findAll().then(categories => {
+            res.render('index', { articles: articles, categories: categories })
+        });
     });
 });
 
@@ -47,14 +53,42 @@ app.get("/:slug", (req, res) => {
         }
     }).then(article => {
         if (article != undefined) {
-            res.render("article", { article: article });
+            Category.findAll().then(categories => {
+                res.render('article', { article: article, categories: categories })
+            });
         } else {
             res.redirect("/");
         }
-    }).catch(()=>{
+    }).catch(() => {
         res.redirect("/");
     });
 });
+
+
+app.get("/category/:slug", (req, res) => {
+    var slug = req.params.slug;
+    Category.findOne({
+        where: {
+            slug: slug
+        },
+        include: [{model: Article}],
+    }).then(category => {
+        if (category != undefined) {
+
+            Category.findAll().then(categories=> {
+                res.render('index', { articles: category.articles, categories: categories })
+            })
+            
+
+        } else {
+            res.redirect("/");
+        }
+    }).catch(() => {
+        res.redirect("/");
+    });
+});
+
+
 
 // Start do server na porta 8080
 app.listen(8080, () => {

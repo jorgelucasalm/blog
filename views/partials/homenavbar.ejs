@@ -4,11 +4,12 @@
             GuiaPress
         </a>
 
-        <ul class="navbar-nav me-auto   ">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
-            </li>
+        <ul class="navbar-nav me-auto">
+            <% categories.forEach(category=>{%>
+                <li class="nav-item">
+                    <a class="nav-link" href="/category/<%= category.slug %>"><%= category.title %></a>
+                </li>
+            <%}) %>
         </ul>
-
     </div>
 </nav>

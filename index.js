@@ -1,14 +1,13 @@
 const express = require("express");
 const app = express();
-const bodyParse = require("body-parser");
 
-const connection = require('./database/database')
+const connection = require('./database/database');
 
-const article = require("./articles/Article")
-const category = require("./categories/Category")
+const Article = require("./articles/Article");
+const Category = require("./categories/Category");
 
-const articleController = require('./articles/ArticlesController')
-const categoriesController = require('./categories/CategoriesController')
+const articleController = require('./articles/ArticlesController');
+const categoriesController = require('./categories/CategoriesController');
 
 // Conectando com o banco
 connection
@@ -26,7 +25,7 @@ app.use(categoriesController);
 // Fazendo o express usar o EJS como view engine
 app.set('view engine', 'ejs');
 // Definindo a pasta onde ficam os arquivos estaticos
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 // instalando o Body Parse OBS: Não precisa instalar a biblioteca do body-parser
 app.use(express.urlencoded({ extended: true }));
@@ -35,10 +34,29 @@ app.use(express.json());
 // Rotas
 //Home page
 app.get("/", (req, res) => {
-    res.render('index')
-})
+    Article.findAll().then(articles => {
+        res.render('index', { articles: articles })
+    });
+});
+
+app.get("/:slug", (req, res) => {
+    var slug = req.params.slug;
+    Article.findOne({
+        where: {
+            slug: slug
+        }
+    }).then(article => {
+        if (article != undefined) {
+            res.render("article", { article: article });
+        } else {
+            res.redirect("/");
+        }
+    }).catch(()=>{
+        res.redirect("/");
+    });
+});
 
 // Start do server na porta 8080
 app.listen(8080, () => {
     console.log("Funcionando")
-})
+});

@@ -71,14 +71,14 @@ app.get("/category/:slug", (req, res) => {
         where: {
             slug: slug
         },
-        include: [{model: Article}],
+        include: [{ model: Article }],
     }).then(category => {
         if (category != undefined) {
 
-            Category.findAll().then(categories=> {
+            Category.findAll().then(categories => {
                 res.render('index', { articles: category.articles, categories: categories })
             })
-            
+
 
         } else {
             res.redirect("/");
@@ -87,8 +87,6 @@ app.get("/category/:slug", (req, res) => {
         res.redirect("/");
     });
 });
-
-
 
 // Start do server na porta 8080
 app.listen(8080, () => {

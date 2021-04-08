@@ -8,7 +8,7 @@
             <h2>Novo artigo</h2>
         </div>
         <div class="card-body">
-            <form method="POST" action="/articles/save">
+            <form method="POST" action="/articles/save/<%= categories.id %>">
                 <input class="form-control" type="text" name="title" placeholder="Defina o titulo da artigo"> <br>
                 <textarea class="form-control" name="body" placeholder="Escreva o artigo aqui!" id="article"></textarea>
                 <br>

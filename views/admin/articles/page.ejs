@@ -1,5 +1,5 @@
-<%- include('./partials/header.ejs') %>
-<%- include('./partials/homenavbar.ejs') %>
+<%- include('../../partials/header.ejs') %>
+<%- include('../../partials/homenavbar.ejs') %>
 <div class="container">
     <hr>
     <div class="jumbotron">
@@ -7,7 +7,7 @@
         <p class="lead">Esse é um simples Blog.</p>
         <hr class="my-4">
       </div>
-    <% articles.forEach(article =>{ %>
+    <% result.articles.rows.forEach(article =>{ %>
 
         <div class="card">
             <div class="card-header">
@@ -20,12 +20,19 @@
         <br>
 
     <% }) %>
+
     <hr>
     <div class="row">
         <div class="col col-12">
-            <a style="float: right"href="/articles/page/2">Next&gt;&gt;&gt;</a>
+            <% if(result.page != 1){%>
+                <a style="float: left"href="/articles/page/<%= result.page - 1 %>"> &lt;&lt;&lt;prev </a>
+            <%}%>
+
+            <% if(result.next){%>
+                <a style="float: right"href="/articles/page/<%= result.page + 1 %>"> Next&gt;&gt;&gt; </a>
+            <%}%>
         </div>
     </div>
     <hr>
 </div>
-<%- include('./partials/footer.ejs') %>
+<%- include('../../partials/footer.ejs') %> 

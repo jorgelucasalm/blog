@@ -92,6 +92,50 @@ router.post("/article/update", (req, res) => {
 
 });
 
+router.get("/articles/page/:page", (req, res) => {
+    var page = req.params.page;
+    var offset = 0;
+    // Numero de elementos que serao apresentados
+    var limit = 4;
 
+    // verificando se o parametro é valido 
+    if (isNaN(page) || page == 1) {
+        offset = 0;
+    } else {
+        // Passando o parametro para um numero
+        offset = (parseInt(page) - 1) * 4
+    }
+
+    // Pegando todos os registros
+    Article.findAndCountAll({
+        limit: limit,
+        offset: offset,
+        order: [
+            ['id', 'DESC']
+        ],
+    }).then(articles => {
+
+        // Vendo se pode ou não ter outra pagina
+        var next;
+        if (offset + limit >= articles.count) {
+            next = false;
+        } else {
+            next = true;
+        }
+
+        var result = {
+            articles: articles,
+            next: next,
+            page: parseInt(page)
+        }
+
+        Category.findAll().then(categories => {
+
+            res.render("admin/articles/page", { result: result, categories: categories });
+
+        });
+
+    });
+})
 
 module.exports = router;

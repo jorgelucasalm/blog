@@ -5,9 +5,11 @@ const connection = require('./database/database');
 
 const Article = require("./articles/Article");
 const Category = require("./categories/Category");
+const User = require("./user/User");
 
 const articleController = require('./articles/ArticlesController');
 const categoriesController = require('./categories/CategoriesController');
+const userController = require("./user/UserController");
 
 // Conectando com o banco
 connection
@@ -21,6 +23,7 @@ connection
 
 app.use(articleController);
 app.use(categoriesController);
+app.use(userController);
 
 // Fazendo o express usar o EJS como view engine
 app.set('view engine', 'ejs');

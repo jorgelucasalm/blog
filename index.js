@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const session = require("express-session");
 
 const connection = require('./database/database');
 
@@ -24,6 +25,12 @@ connection
 app.use(articleController);
 app.use(categoriesController);
 app.use(userController);
+
+// Sessions
+app.use(session({
+    secret: "qualquercoisa",
+    cookie: {maxAge: 30000}
+}))
 
 // Fazendo o express usar o EJS como view engine
 app.set('view engine', 'ejs');

@@ -2,27 +2,28 @@ const express = require("express");
 const router = express.Router();
 const User = require("./User")
 const bcrypt = require("bcryptjs")
+const adminAuth = require("../middleware/adminAuth")
 const session = require("express-session");
-
 
 router.use(session({
     secret: "qualquercoisa",
     cookie: {maxAge: 30000}
 }))
+
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
-router.get("/admin/users/new", (req, res) => {
+router.get("/admin/users", adminAuth,(req, res) => {
+    User.findAll().then(users => {
+        res.render("./admin/users/index", { users: users })
+    });
+});
+
+router.get("/admin/users/new", adminAuth,(req, res) => {
     res.render("./admin/users/create")
 });
 
-router.get("/admin/users", (req, res) => {
-    User.findAll().then(users => {
-        res.render("./admin/users/index", { users: users })
-    })
-});
-
-router.post("/users/save", (req, res) => {
+router.post("/users/save", adminAuth,(req, res) => {
     var email = req.body.email;
     var pass = req.body.pass;
 
@@ -49,7 +50,7 @@ router.post("/users/save", (req, res) => {
     })
 });
 
-router.post("/user/delete", (req, res) => {
+router.post("/user/delete", adminAuth,(req, res) => {
     var id = req.body.id;
 
     User.destroy({
@@ -81,7 +82,7 @@ router.post("/authenticate", (req, res) => {
                     id: user.id,
                     email: user.login
                 };
-                res.json(req.session.user);
+                res.redirect("/");
             } else {
                 res.redirect("/login")
             }
